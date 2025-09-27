@@ -7,11 +7,11 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "For Students", href: "#students", icon: Users },
-    { name: "For Colleges", href: "#colleges", icon: GraduationCap },
-    { name: "For Industry", href: "#industry", icon: Building },
-    { name: "Features", href: "#features" },
-    { name: "About", href: "#about" },
+    { name: "For Students", href: "/student-dashboard", icon: Users },
+    { name: "For Colleges", href: "/college-dashboard", icon: GraduationCap },
+    { name: "For Industry", href: "/industry-dashboard", icon: Building },
+    { name: "Features", href: "/#features" },
+    { name: "About", href: "/#about" },
   ];
 
   return (
@@ -32,14 +32,14 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className="text-muted-foreground hover:text-primary transition-colors font-medium flex items-center gap-2"
               >
                 {item.icon && <item.icon className="w-4 h-4" />}
                 {item.name}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -71,15 +71,15 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 space-y-4 animate-fade-in-up">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-muted transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.icon && <item.icon className="w-5 h-5 text-primary" />}
                 <span className="font-medium">{item.name}</span>
-              </a>
+              </Link>
             ))}
             <div className="flex flex-col gap-3 px-4 pt-4 border-t border-border">
               <Link to="/login">

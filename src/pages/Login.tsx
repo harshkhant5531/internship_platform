@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const { toast } = useToast();
 
   const userTypes = [
@@ -71,6 +72,7 @@ const Login = () => {
     }, 1500);
   };
 
+
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
       {/* Background Effects */}
@@ -101,79 +103,137 @@ const Login = () => {
         </div>
 
         {/* User Type Selection */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {userTypes.map((type) => (
-            <Card key={type.id} className="elegant-card border-0 hover:shadow-glow transition-all group cursor-pointer">
-              <CardHeader className="text-center pb-4">
-                <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r ${type.gradient} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                  <type.icon className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold">{type.title}</CardTitle>
-                <CardDescription className="text-primary font-semibold">
-                  {type.subtitle}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-muted-foreground mb-4 text-sm">
-                  {type.description}
-                </p>
-                <Button 
-                  className="w-full btn-gradient-primary group"
-                  onClick={() => handleLogin(type.id)}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      Login as {type.title}
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Login Form */}
         <Card className="max-w-md mx-auto elegant-card border-0">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold">Sign In to Your Account</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              {showRegister ? 'Register New Account' : 'Sign In to Your Account'}
+            </CardTitle>
             <CardDescription>
-              Enter your credentials to access your dashboard
+              {showRegister
+                ? 'Fill in your details to create an account'
+                : 'Enter your credentials to access your dashboard'}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="email" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="email">Email</TabsTrigger>
-                <TabsTrigger value="phone">Phone</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="email" className="space-y-4 mt-6">
+            {showRegister ? (
+              <form
+                className="space-y-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setIsLoading(true);
+                  const form = e.target as HTMLFormElement;
+                  const email = (form.elements.namedItem('reg_email') as HTMLInputElement)?.value;
+                  const password = (form.elements.namedItem('reg_password') as HTMLInputElement)?.value;
+                  const role = (form.elements.namedItem('reg_role') as HTMLSelectElement)?.value;
+                  // Get users from localStorage
+                  const users = JSON.parse(localStorage.getItem('users') || '[]');
+                  // Check if user already exists
+                  if (users.some((u: any) => u.email === email)) {
+                    toast({ title: 'Registration Failed', description: 'Email already registered', variant: 'destructive' });
+                    setIsLoading(false);
+                    return;
+                  }
+                  // Add new user
+                  users.push({ email, password, role });
+                  localStorage.setItem('users', JSON.stringify(users));
+                  toast({ title: 'Registration Successful!', description: 'You can now log in.' });
+                  setShowRegister(false);
+                  setIsLoading(false);
+                }}
+              >
+                <div className="space-y-2">
+                  <Label htmlFor="reg_email">Email Address</Label>
+                  <Input
+                    id="reg_email"
+                    name="reg_email"
+                    type="email"
+                    placeholder="your.email@example.com"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="reg_password">Password</Label>
+                  <Input
+                    id="reg_password"
+                    name="reg_password"
+                    type="password"
+                    placeholder="Create a password"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="reg_role">Select Role</Label>
+                  <select
+                    id="reg_role"
+                    name="reg_role"
+                    className="w-full border rounded px-3 py-2 bg-background text-foreground"
+                    required
+                    defaultValue="student"
+                  >
+                    {userTypes.map(type => (
+                      <option key={type.id} value={type.id}>{type.title}</option>
+                    ))}
+                  </select>
+                </div>
+                <Button className="w-full btn-gradient-primary" size="lg" type="submit" disabled={isLoading}>
+                  {isLoading ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
+                  ) : (
+                    'Register'
+                  )}
+                </Button>
+              </form>
+            ) : (
+              <form
+                className="space-y-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setIsLoading(true);
+                  const form = e.target as HTMLFormElement;
+                  const email = (form.elements.namedItem('email') as HTMLInputElement)?.value;
+                  const password = (form.elements.namedItem('password') as HTMLInputElement)?.value;
+                  const role = (form.elements.namedItem('role') as HTMLSelectElement)?.value;
+                  // Get users from localStorage
+                  const users = JSON.parse(localStorage.getItem('users') || '[]');
+                  const user = users.find((u: any) => u.email === email && u.password === password && u.role === role);
+                  if (user) {
+                    localStorage.setItem('token', 'demo-token');
+                    toast({ title: 'Login Successful!', description: `Welcome to your ${role} dashboard.` });
+                    const selectedUserType = userTypes.find(type => type.id === role);
+                    if (selectedUserType) {
+                      window.location.href = selectedUserType.route;
+                    }
+                  } else {
+                    toast({ title: 'Login Failed', description: 'Invalid credentials or role', variant: 'destructive' });
+                  }
+                  setIsLoading(false);
+                }}
+              >
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input 
                       id="email"
+                      name="email"
                       type="email" 
                       placeholder="your.email@example.com"
                       className="pl-10"
+                      required
                     />
                   </div>
                 </div>
-                
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input 
                       id="password"
+                      name="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
                       className="pl-10 pr-10"
+                      required
                     />
                     <button
                       type="button"
@@ -184,7 +244,20 @@ const Login = () => {
                     </button>
                   </div>
                 </div>
-                
+                <div className="space-y-2">
+                  <Label htmlFor="role">Select Role</Label>
+                  <select
+                    id="role"
+                    name="role"
+                    className="w-full border rounded px-3 py-2 bg-background text-foreground"
+                    required
+                    defaultValue="student"
+                  >
+                    {userTypes.map(type => (
+                      <option key={type.id} value={type.id}>{type.title}</option>
+                    ))}
+                  </select>
+                </div>
                 <div className="flex items-center justify-between text-sm">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" className="rounded border-gray-300" />
@@ -194,33 +267,31 @@ const Login = () => {
                     Forgot password?
                   </Link>
                 </div>
-                
-                <Button className="w-full btn-gradient-primary" size="lg">
-                  Sign In with Email
+                <Button className="w-full btn-gradient-primary" size="lg" type="submit" disabled={isLoading}>
+                  {isLoading ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
+                  ) : (
+                    'Sign In'
+                  )}
                 </Button>
-              </TabsContent>
-              
-              <TabsContent value="phone" className="space-y-4 mt-6">
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input 
-                    id="phone"
-                    type="tel" 
-                    placeholder="+91 98765 43210"
-                  />
-                </div>
-                
-                <Button className="w-full btn-gradient-primary" size="lg">
-                  Send OTP
-                </Button>
-              </TabsContent>
-            </Tabs>
-            
+              </form>
+            )}
             <div className="mt-6 text-center text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <Link to="#" className="text-primary hover:text-primary/80 font-medium">
-                Register here
-              </Link>
+              {showRegister ? (
+                <>
+                  Already have an account?{' '}
+                  <button type="button" className="text-primary hover:text-primary/80 font-medium" onClick={() => setShowRegister(false)}>
+                    Login here
+                  </button>
+                </>
+              ) : (
+                <>
+                  Don't have an account?{' '}
+                  <button type="button" className="text-primary hover:text-primary/80 font-medium" onClick={() => setShowRegister(true)}>
+                    Register here
+                  </button>
+                </>
+              )}
             </div>
           </CardContent>
         </Card>

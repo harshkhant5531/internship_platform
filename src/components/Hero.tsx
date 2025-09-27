@@ -73,9 +73,11 @@ const Hero = () => {
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                Watch Demo
-              </Button>
+              <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="bg-white text-primary font-semibold border border-primary hover:bg-primary/10">
+                  Watch Demo
+                </Button>
+              </a>
             </div>
           </div>
           

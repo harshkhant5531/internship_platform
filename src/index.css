@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Professional NEP-compliant internship platform design system */
+
+@layer base {
+  :root {
+    /* Primary brand colors - Professional blues for education/government */
+    --background: 0 0% 100%;
+    --foreground: 225 25% 15%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 225 25% 15%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 225 25% 15%;
+    
+    /* Primary - Deep professional blue */
+    --primary: 220 85% 54%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 220 85% 64%;
+    
+    /* Secondary - Elegant purple accent */
+    --secondary: 270 70% 60%;
+    --secondary-foreground: 0 0% 100%;
+    
+    /* Success - Green for achievements */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Warning - Orange for alerts */
+    --warning: 25 95% 53%;
+    --warning-foreground: 0 0% 100%;
+    
+    --muted: 220 14% 96%;
+    --muted-foreground: 225 15% 45%;
+    
+    --accent: 220 14% 96%;
+    --accent-foreground: 225 25% 15%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    
+    /* Professional gradients for modern UI */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(270 70% 70%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 14% 98%) 100%);
+    
+    /* Professional shadows */
+    --shadow-elegant: 0 4px 6px -1px hsl(var(--primary) / 0.1), 0 2px 4px -1px hsl(var(--primary) / 0.06);
+    --shadow-card: 0 10px 15px -3px hsl(var(--primary) / 0.1), 0 4px 6px -2px hsl(var(--primary) / 0.05);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.3);
+    --shadow-soft: 0 2px 8px hsl(220 13% 91% / 0.6);
+    
+    /* Animation timing */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark mode colors for professional UI */
+    --background: 225 25% 8%;
+    --foreground: 0 0% 95%;
+    
+    --card: 225 25% 10%;
+    --card-foreground: 0 0% 95%;
+    
+    --popover: 225 25% 10%;
+    --popover-foreground: 0 0% 95%;
+    
+    --primary: 220 85% 64%;
+    --primary-foreground: 225 25% 8%;
+    --primary-glow: 220 85% 74%;
+    
+    --secondary: 270 70% 70%;
+    --secondary-foreground: 225 25% 8%;
+    
+    --success: 142 76% 46%;
+    --success-foreground: 225 25% 8%;
+    
+    --warning: 25 95% 63%;
+    --warning-foreground: 225 25% 8%;
+    
+    --muted: 225 15% 15%;
+    --muted-foreground: 225 10% 65%;
+    
+    --accent: 225 15% 15%;
+    --accent-foreground: 0 0% 95%;
+    
+    --destructive: 0 84% 70%;
+    --destructive-foreground: 225 25% 8%;
+    
+    --border: 225 15% 20%;
+    --input: 225 15% 20%;
+    --ring: 220 85% 64%;
+    
+    /* Dark mode gradients */
+    --gradient-card: linear-gradient(145deg, hsl(225 25% 10%) 0%, hsl(225 15% 12%) 100%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* Custom component styles for professional UI */
+@layer components {
+  /* Hero gradient background */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+  
+  /* Card with elegant styling */
+  .elegant-card {
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+  }
+  
+  .elegant-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+  }
+  
+  /* Professional button gradients */
+  .btn-gradient-primary {
+    background: var(--gradient-primary);
+    transition: var(--transition-smooth);
+  }
+  
+  .btn-gradient-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-elegant);
+  }
+  
+  /* Floating animation */
+  .float-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* Pulse glow effect */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+  
+  /* Smooth slide-in animation */
+  .slide-in-bottom {
+    animation: slide-in-bottom 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  /* Professional text gradient */
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Keyframe animations for modern effects */
+@layer utilities {
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  @keyframes pulse-glow {
+    from {
+      box-shadow: 0 0 20px hsl(var(--primary-glow) / 0.4);
+    }
+    to {
+      box-shadow: 0 0 30px hsl(var(--primary-glow) / 0.8);
+    }
+  }
+  
+  @keyframes slide-in-bottom {
+    0% {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
